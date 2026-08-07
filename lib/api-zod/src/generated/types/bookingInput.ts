@@ -9,9 +9,8 @@
 export interface BookingInput {
   customer: string;
   email: string;
-  service: string;
-  staff: string;
+  serviceId: number;
+  staffId: number;
   date: string;
   time: string;
-  amount: number;
 }

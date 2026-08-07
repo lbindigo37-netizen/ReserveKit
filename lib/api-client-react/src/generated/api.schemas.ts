@@ -5,8 +5,30 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+export interface ErrorResponse {
+  error: string;
+}
+
 export interface HealthStatus {
   status: string;
+}
+
+export interface SignupInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
+export interface LoginInput {
+  email: string;
+  password: string;
+}
+
+export interface AuthUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
 }
 
 export interface Business {
@@ -17,6 +39,36 @@ export interface Business {
   currency: string;
   timezone: string;
   accent?: string;
+  primaryColor: string;
+  secondaryColor: string;
+  logoUrl?: string;
+  address?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  aboutTitle?: string;
+  aboutBody?: string;
+  bookingIntervalMinutes: number;
+  cancellationPolicy: string;
+}
+
+export interface BusinessInput {
+  name?: string;
+  type?: string;
+  tagline?: string;
+  bookingLabel?: string;
+  currency?: string;
+  timezone?: string;
+  accent?: string;
+  primaryColor?: string;
+  secondaryColor?: string;
+  logoUrl?: string;
+  address?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  aboutTitle?: string;
+  aboutBody?: string;
+  bookingIntervalMinutes?: number;
+  cancellationPolicy?: string;
 }
 
 export interface Service {
@@ -25,9 +77,40 @@ export interface Service {
   category: string;
   description: string;
   duration: number;
+  bufferMinutes: number;
   price: number;
   color: string;
+  imageUrl?: string;
   popular: boolean;
+  active: boolean;
+  staffIds: number[];
+}
+
+export interface ServiceInput {
+  name: string;
+  category: string;
+  description: string;
+  duration: number;
+  bufferMinutes?: number;
+  price: number;
+  color: string;
+  imageUrl?: string;
+  popular?: boolean;
+  active?: boolean;
+  staffIds?: number[];
+}
+
+export interface WorkingHoursEntry {
+  weekday: number;
+  startMinute: number;
+  endMinute: number;
+}
+
+export interface VacationEntry {
+  id: number;
+  startDate: string;
+  endDate: string;
+  reason?: string;
 }
 
 export interface Staff {
@@ -36,8 +119,43 @@ export interface Staff {
   role: string;
   initials: string;
   color: string;
+  photoUrl?: string;
+  active: boolean;
   utilization: number;
   bookings: number;
+  workingHours: WorkingHoursEntry[];
+  vacations: VacationEntry[];
+  serviceIds: number[];
+}
+
+export type StaffInputVacationsItem = {
+  startDate: string;
+  endDate: string;
+  reason?: string;
+};
+
+export interface StaffInput {
+  name: string;
+  role: string;
+  color?: string;
+  photoUrl?: string;
+  active?: boolean;
+  workingHours?: WorkingHoursEntry[];
+  vacations?: StaffInputVacationsItem[];
+  serviceIds?: number[];
+}
+
+export interface AvailabilityResponse {
+  date: string;
+  slots: string[];
+}
+
+export interface Payment {
+  status: string;
+  amount: number;
+  currency: string;
+  provider: string;
+  providerRef?: string;
 }
 
 export interface Booking {
@@ -45,36 +163,90 @@ export interface Booking {
   customer: string;
   email?: string;
   service: string;
+  serviceId?: number;
   staff: string;
+  staffId?: number;
   date: string;
   time: string;
   status: string;
   amount: number;
+  payment: Payment;
 }
 
 export interface BookingInput {
   customer: string;
   email: string;
-  service: string;
-  staff: string;
+  serviceId: number;
+  staffId: number;
   date: string;
   time: string;
-  amount: number;
 }
 
 export interface BookingStatusInput {
   status: string;
 }
 
+export interface RescheduleBookingInput {
+  date: string;
+  time: string;
+}
+
 export interface Customer {
   id: number;
   name: string;
   email: string;
+  phone?: string;
   initials: string;
   color: string;
   visits: number;
   spending: number;
   lastVisit: string;
+  notes?: string;
+}
+
+export interface CustomerDetail {
+  customer: Customer;
+  bookings: Booking[];
+}
+
+export interface CustomerInput {
+  phone?: string;
+  notes?: string;
+}
+
+export interface Profile {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+}
+
+export interface ProfileInput {
+  name?: string;
+  phone?: string;
+}
+
+export interface Notification {
+  id: number;
+  type: string;
+  title: string;
+  body: string;
+  read: boolean;
+  createdAt: string;
+}
+
+export interface Review {
+  id: number;
+  customerName: string;
+  rating: number;
+  comment: string;
+  serviceName?: string;
+}
+
+export interface ActivityEntry {
+  id: number;
+  message: string;
+  timestamp: string;
 }
 
 export interface Dashboard {
@@ -83,6 +255,8 @@ export interface Dashboard {
   pending: number;
   customers: number;
   upcoming: Booking[];
+  recentCustomers: Customer[];
+  recentActivity: ActivityEntry[];
 }
 
 export interface MetricPoint {
@@ -94,8 +268,19 @@ export interface Analytics {
   bookingsByDay: MetricPoint[];
   revenueByMonth: MetricPoint[];
   popularServices: MetricPoint[];
+  staffUtilization: MetricPoint[];
   returningRate: number;
 }
+
+export type GetServicesParams = {
+includeInactive?: boolean;
+};
+
+export type GetAvailabilityParams = {
+serviceId: number;
+staffId: number;
+date: string;
+};
 
 export type GetBookingsParams = {
 status?: string;

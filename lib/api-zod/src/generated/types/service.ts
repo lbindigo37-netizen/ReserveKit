@@ -12,7 +12,11 @@ export interface Service {
   category: string;
   description: string;
   duration: number;
+  bufferMinutes: number;
   price: number;
   color: string;
+  imageUrl?: string;
   popular: boolean;
+  active: boolean;
+  staffIds: number[];
 }

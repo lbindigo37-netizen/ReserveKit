@@ -18,6 +18,56 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
+ * @summary Create a customer account
+ */
+export const SignupBody = zod.object({
+  "name": zod.string(),
+  "email": zod.string(),
+  "password": zod.string()
+})
+
+export const SignupResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "role": zod.string()
+})
+
+
+/**
+ * @summary Log in with email and password
+ */
+export const LoginBody = zod.object({
+  "email": zod.string(),
+  "password": zod.string()
+})
+
+export const LoginResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "role": zod.string()
+})
+
+
+/**
+ * @summary Log out the current session
+ */
+export const LogoutResponse = zod.void()
+
+
+/**
+ * @summary Get the currently authenticated user
+ */
+export const GetCurrentUserResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "role": zod.string()
+})
+
+
+/**
  * @summary Get business configuration
  */
 export const GetBusinessResponse = zod.object({
@@ -27,24 +77,166 @@ export const GetBusinessResponse = zod.object({
   "bookingLabel": zod.string(),
   "currency": zod.string(),
   "timezone": zod.string(),
-  "accent": zod.string().optional()
+  "accent": zod.string().optional(),
+  "primaryColor": zod.string(),
+  "secondaryColor": zod.string(),
+  "logoUrl": zod.string().optional(),
+  "address": zod.string().optional(),
+  "contactEmail": zod.string().optional(),
+  "contactPhone": zod.string().optional(),
+  "aboutTitle": zod.string().optional(),
+  "aboutBody": zod.string().optional(),
+  "bookingIntervalMinutes": zod.number(),
+  "cancellationPolicy": zod.string()
+})
+
+
+/**
+ * @summary Update business configuration
+ */
+export const UpdateBusinessBody = zod.object({
+  "name": zod.string().optional(),
+  "type": zod.string().optional(),
+  "tagline": zod.string().optional(),
+  "bookingLabel": zod.string().optional(),
+  "currency": zod.string().optional(),
+  "timezone": zod.string().optional(),
+  "accent": zod.string().optional(),
+  "primaryColor": zod.string().optional(),
+  "secondaryColor": zod.string().optional(),
+  "logoUrl": zod.string().optional(),
+  "address": zod.string().optional(),
+  "contactEmail": zod.string().optional(),
+  "contactPhone": zod.string().optional(),
+  "aboutTitle": zod.string().optional(),
+  "aboutBody": zod.string().optional(),
+  "bookingIntervalMinutes": zod.number().optional(),
+  "cancellationPolicy": zod.string().optional()
+})
+
+export const UpdateBusinessResponse = zod.object({
+  "name": zod.string(),
+  "type": zod.string(),
+  "tagline": zod.string(),
+  "bookingLabel": zod.string(),
+  "currency": zod.string(),
+  "timezone": zod.string(),
+  "accent": zod.string().optional(),
+  "primaryColor": zod.string(),
+  "secondaryColor": zod.string(),
+  "logoUrl": zod.string().optional(),
+  "address": zod.string().optional(),
+  "contactEmail": zod.string().optional(),
+  "contactPhone": zod.string().optional(),
+  "aboutTitle": zod.string().optional(),
+  "aboutBody": zod.string().optional(),
+  "bookingIntervalMinutes": zod.number(),
+  "cancellationPolicy": zod.string()
 })
 
 
 /**
  * @summary List services
  */
+export const GetServicesQueryParams = zod.object({
+  "includeInactive": zod.coerce.boolean().optional()
+})
+
 export const GetServicesResponseItem = zod.object({
   "id": zod.number(),
   "name": zod.string(),
   "category": zod.string(),
   "description": zod.string(),
   "duration": zod.number(),
+  "bufferMinutes": zod.number(),
   "price": zod.number(),
   "color": zod.string(),
-  "popular": zod.boolean()
+  "imageUrl": zod.string().optional(),
+  "popular": zod.boolean(),
+  "active": zod.boolean(),
+  "staffIds": zod.array(zod.number())
 })
 export const GetServicesResponse = zod.array(GetServicesResponseItem)
+
+
+/**
+ * @summary Create a service
+ */
+export const CreateServiceBody = zod.object({
+  "name": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "duration": zod.number(),
+  "bufferMinutes": zod.number().optional(),
+  "price": zod.number(),
+  "color": zod.string(),
+  "imageUrl": zod.string().optional(),
+  "popular": zod.boolean().optional(),
+  "active": zod.boolean().optional(),
+  "staffIds": zod.array(zod.number()).optional()
+})
+
+export const CreateServiceResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "duration": zod.number(),
+  "bufferMinutes": zod.number(),
+  "price": zod.number(),
+  "color": zod.string(),
+  "imageUrl": zod.string().optional(),
+  "popular": zod.boolean(),
+  "active": zod.boolean(),
+  "staffIds": zod.array(zod.number())
+})
+
+
+/**
+ * @summary Update a service
+ */
+export const UpdateServiceParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateServiceBody = zod.object({
+  "name": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "duration": zod.number(),
+  "bufferMinutes": zod.number().optional(),
+  "price": zod.number(),
+  "color": zod.string(),
+  "imageUrl": zod.string().optional(),
+  "popular": zod.boolean().optional(),
+  "active": zod.boolean().optional(),
+  "staffIds": zod.array(zod.number()).optional()
+})
+
+export const UpdateServiceResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "duration": zod.number(),
+  "bufferMinutes": zod.number(),
+  "price": zod.number(),
+  "color": zod.string(),
+  "imageUrl": zod.string().optional(),
+  "popular": zod.boolean(),
+  "active": zod.boolean(),
+  "staffIds": zod.array(zod.number())
+})
+
+
+/**
+ * @summary Delete a service
+ */
+export const DeleteServiceParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteServiceResponse = zod.void()
 
 
 /**
@@ -56,10 +248,147 @@ export const GetStaffResponseItem = zod.object({
   "role": zod.string(),
   "initials": zod.string(),
   "color": zod.string(),
+  "photoUrl": zod.string().optional(),
+  "active": zod.boolean(),
   "utilization": zod.number(),
-  "bookings": zod.number()
+  "bookings": zod.number(),
+  "workingHours": zod.array(zod.object({
+  "weekday": zod.number(),
+  "startMinute": zod.number(),
+  "endMinute": zod.number()
+})),
+  "vacations": zod.array(zod.object({
+  "id": zod.number(),
+  "startDate": zod.string(),
+  "endDate": zod.string(),
+  "reason": zod.string().optional()
+})),
+  "serviceIds": zod.array(zod.number())
 })
 export const GetStaffResponse = zod.array(GetStaffResponseItem)
+
+
+/**
+ * @summary Create a staff member
+ */
+export const CreateStaffBody = zod.object({
+  "name": zod.string(),
+  "role": zod.string(),
+  "color": zod.string().optional(),
+  "photoUrl": zod.string().optional(),
+  "active": zod.boolean().optional(),
+  "workingHours": zod.array(zod.object({
+  "weekday": zod.number(),
+  "startMinute": zod.number(),
+  "endMinute": zod.number()
+})).optional(),
+  "vacations": zod.array(zod.object({
+  "startDate": zod.string(),
+  "endDate": zod.string(),
+  "reason": zod.string().optional()
+})).optional(),
+  "serviceIds": zod.array(zod.number()).optional()
+})
+
+export const CreateStaffResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "role": zod.string(),
+  "initials": zod.string(),
+  "color": zod.string(),
+  "photoUrl": zod.string().optional(),
+  "active": zod.boolean(),
+  "utilization": zod.number(),
+  "bookings": zod.number(),
+  "workingHours": zod.array(zod.object({
+  "weekday": zod.number(),
+  "startMinute": zod.number(),
+  "endMinute": zod.number()
+})),
+  "vacations": zod.array(zod.object({
+  "id": zod.number(),
+  "startDate": zod.string(),
+  "endDate": zod.string(),
+  "reason": zod.string().optional()
+})),
+  "serviceIds": zod.array(zod.number())
+})
+
+
+/**
+ * @summary Update a staff member
+ */
+export const UpdateStaffParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateStaffBody = zod.object({
+  "name": zod.string(),
+  "role": zod.string(),
+  "color": zod.string().optional(),
+  "photoUrl": zod.string().optional(),
+  "active": zod.boolean().optional(),
+  "workingHours": zod.array(zod.object({
+  "weekday": zod.number(),
+  "startMinute": zod.number(),
+  "endMinute": zod.number()
+})).optional(),
+  "vacations": zod.array(zod.object({
+  "startDate": zod.string(),
+  "endDate": zod.string(),
+  "reason": zod.string().optional()
+})).optional(),
+  "serviceIds": zod.array(zod.number()).optional()
+})
+
+export const UpdateStaffResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "role": zod.string(),
+  "initials": zod.string(),
+  "color": zod.string(),
+  "photoUrl": zod.string().optional(),
+  "active": zod.boolean(),
+  "utilization": zod.number(),
+  "bookings": zod.number(),
+  "workingHours": zod.array(zod.object({
+  "weekday": zod.number(),
+  "startMinute": zod.number(),
+  "endMinute": zod.number()
+})),
+  "vacations": zod.array(zod.object({
+  "id": zod.number(),
+  "startDate": zod.string(),
+  "endDate": zod.string(),
+  "reason": zod.string().optional()
+})),
+  "serviceIds": zod.array(zod.number())
+})
+
+
+/**
+ * @summary Delete a staff member
+ */
+export const DeleteStaffParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteStaffResponse = zod.void()
+
+
+/**
+ * @summary Get available time slots for a service and staff member on a date
+ */
+export const GetAvailabilityQueryParams = zod.object({
+  "serviceId": zod.coerce.number(),
+  "staffId": zod.coerce.number(),
+  "date": zod.coerce.string()
+})
+
+export const GetAvailabilityResponse = zod.object({
+  "date": zod.string(),
+  "slots": zod.array(zod.string())
+})
 
 
 /**
@@ -75,11 +404,20 @@ export const GetBookingsResponseItem = zod.object({
   "customer": zod.string(),
   "email": zod.string().optional(),
   "service": zod.string(),
+  "serviceId": zod.number().optional(),
   "staff": zod.string(),
+  "staffId": zod.number().optional(),
   "date": zod.string(),
   "time": zod.string(),
   "status": zod.string(),
-  "amount": zod.number()
+  "amount": zod.number(),
+  "payment": zod.object({
+  "status": zod.string(),
+  "amount": zod.number(),
+  "currency": zod.string(),
+  "provider": zod.string(),
+  "providerRef": zod.string().optional()
+})
 })
 export const GetBookingsResponse = zod.array(GetBookingsResponseItem)
 
@@ -90,11 +428,10 @@ export const GetBookingsResponse = zod.array(GetBookingsResponseItem)
 export const CreateBookingBody = zod.object({
   "customer": zod.string(),
   "email": zod.string(),
-  "service": zod.string(),
-  "staff": zod.string(),
+  "serviceId": zod.number(),
+  "staffId": zod.number(),
   "date": zod.string(),
-  "time": zod.string(),
-  "amount": zod.number()
+  "time": zod.string()
 })
 
 export const CreateBookingResponse = zod.object({
@@ -102,12 +439,47 @@ export const CreateBookingResponse = zod.object({
   "customer": zod.string(),
   "email": zod.string().optional(),
   "service": zod.string(),
+  "serviceId": zod.number().optional(),
   "staff": zod.string(),
+  "staffId": zod.number().optional(),
   "date": zod.string(),
   "time": zod.string(),
   "status": zod.string(),
-  "amount": zod.number()
+  "amount": zod.number(),
+  "payment": zod.object({
+  "status": zod.string(),
+  "amount": zod.number(),
+  "currency": zod.string(),
+  "provider": zod.string(),
+  "providerRef": zod.string().optional()
 })
+})
+
+
+/**
+ * @summary List the current customer's bookings
+ */
+export const GetMyBookingsResponseItem = zod.object({
+  "id": zod.number(),
+  "customer": zod.string(),
+  "email": zod.string().optional(),
+  "service": zod.string(),
+  "serviceId": zod.number().optional(),
+  "staff": zod.string(),
+  "staffId": zod.number().optional(),
+  "date": zod.string(),
+  "time": zod.string(),
+  "status": zod.string(),
+  "amount": zod.number(),
+  "payment": zod.object({
+  "status": zod.string(),
+  "amount": zod.number(),
+  "currency": zod.string(),
+  "provider": zod.string(),
+  "providerRef": zod.string().optional()
+})
+})
+export const GetMyBookingsResponse = zod.array(GetMyBookingsResponseItem)
 
 
 /**
@@ -126,11 +498,54 @@ export const UpdateBookingStatusResponse = zod.object({
   "customer": zod.string(),
   "email": zod.string().optional(),
   "service": zod.string(),
+  "serviceId": zod.number().optional(),
   "staff": zod.string(),
+  "staffId": zod.number().optional(),
   "date": zod.string(),
   "time": zod.string(),
   "status": zod.string(),
-  "amount": zod.number()
+  "amount": zod.number(),
+  "payment": zod.object({
+  "status": zod.string(),
+  "amount": zod.number(),
+  "currency": zod.string(),
+  "provider": zod.string(),
+  "providerRef": zod.string().optional()
+})
+})
+
+
+/**
+ * @summary Reschedule a booking to a new date and time
+ */
+export const RescheduleBookingParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const RescheduleBookingBody = zod.object({
+  "date": zod.string(),
+  "time": zod.string()
+})
+
+export const RescheduleBookingResponse = zod.object({
+  "id": zod.number(),
+  "customer": zod.string(),
+  "email": zod.string().optional(),
+  "service": zod.string(),
+  "serviceId": zod.number().optional(),
+  "staff": zod.string(),
+  "staffId": zod.number().optional(),
+  "date": zod.string(),
+  "time": zod.string(),
+  "status": zod.string(),
+  "amount": zod.number(),
+  "payment": zod.object({
+  "status": zod.string(),
+  "amount": zod.number(),
+  "currency": zod.string(),
+  "provider": zod.string(),
+  "providerRef": zod.string().optional()
+})
 })
 
 
@@ -141,13 +556,195 @@ export const GetCustomersResponseItem = zod.object({
   "id": zod.number(),
   "name": zod.string(),
   "email": zod.string(),
+  "phone": zod.string().optional(),
   "initials": zod.string(),
   "color": zod.string(),
   "visits": zod.number(),
   "spending": zod.number(),
-  "lastVisit": zod.string()
+  "lastVisit": zod.string(),
+  "notes": zod.string().optional()
 })
 export const GetCustomersResponse = zod.array(GetCustomersResponseItem)
+
+
+/**
+ * @summary Get a single customer with booking history
+ */
+export const GetCustomerParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const GetCustomerResponse = zod.object({
+  "customer": zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string().optional(),
+  "initials": zod.string(),
+  "color": zod.string(),
+  "visits": zod.number(),
+  "spending": zod.number(),
+  "lastVisit": zod.string(),
+  "notes": zod.string().optional()
+}),
+  "bookings": zod.array(zod.object({
+  "id": zod.number(),
+  "customer": zod.string(),
+  "email": zod.string().optional(),
+  "service": zod.string(),
+  "serviceId": zod.number().optional(),
+  "staff": zod.string(),
+  "staffId": zod.number().optional(),
+  "date": zod.string(),
+  "time": zod.string(),
+  "status": zod.string(),
+  "amount": zod.number(),
+  "payment": zod.object({
+  "status": zod.string(),
+  "amount": zod.number(),
+  "currency": zod.string(),
+  "provider": zod.string(),
+  "providerRef": zod.string().optional()
+})
+}))
+})
+
+
+/**
+ * @summary Update a customer's notes/contact info
+ */
+export const UpdateCustomerParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateCustomerBody = zod.object({
+  "phone": zod.string().optional(),
+  "notes": zod.string().optional()
+})
+
+export const UpdateCustomerResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string().optional(),
+  "initials": zod.string(),
+  "color": zod.string(),
+  "visits": zod.number(),
+  "spending": zod.number(),
+  "lastVisit": zod.string(),
+  "notes": zod.string().optional()
+})
+
+
+/**
+ * @summary Get the current customer's profile
+ */
+export const GetProfileResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string().optional()
+})
+
+
+/**
+ * @summary Update the current customer's profile
+ */
+export const UpdateProfileBody = zod.object({
+  "name": zod.string().optional(),
+  "phone": zod.string().optional()
+})
+
+export const UpdateProfileResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string().optional()
+})
+
+
+/**
+ * @summary List the current customer's favorite services
+ */
+export const GetFavoritesResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "category": zod.string(),
+  "description": zod.string(),
+  "duration": zod.number(),
+  "bufferMinutes": zod.number(),
+  "price": zod.number(),
+  "color": zod.string(),
+  "imageUrl": zod.string().optional(),
+  "popular": zod.boolean(),
+  "active": zod.boolean(),
+  "staffIds": zod.array(zod.number())
+})
+export const GetFavoritesResponse = zod.array(GetFavoritesResponseItem)
+
+
+/**
+ * @summary Mark a service as a favorite
+ */
+export const AddFavoriteParams = zod.object({
+  "serviceId": zod.coerce.number()
+})
+
+export const AddFavoriteResponse = zod.void()
+
+
+/**
+ * @summary Remove a service from favorites
+ */
+export const RemoveFavoriteParams = zod.object({
+  "serviceId": zod.coerce.number()
+})
+
+export const RemoveFavoriteResponse = zod.void()
+
+
+/**
+ * @summary List the current user's notifications
+ */
+export const GetNotificationsResponseItem = zod.object({
+  "id": zod.number(),
+  "type": zod.string(),
+  "title": zod.string(),
+  "body": zod.string(),
+  "read": zod.boolean(),
+  "createdAt": zod.string()
+})
+export const GetNotificationsResponse = zod.array(GetNotificationsResponseItem)
+
+
+/**
+ * @summary Mark a notification as read
+ */
+export const MarkNotificationReadParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const MarkNotificationReadResponse = zod.object({
+  "id": zod.number(),
+  "type": zod.string(),
+  "title": zod.string(),
+  "body": zod.string(),
+  "read": zod.boolean(),
+  "createdAt": zod.string()
+})
+
+
+/**
+ * @summary List public reviews
+ */
+export const GetReviewsResponseItem = zod.object({
+  "id": zod.number(),
+  "customerName": zod.string(),
+  "rating": zod.number(),
+  "comment": zod.string(),
+  "serviceName": zod.string().optional()
+})
+export const GetReviewsResponse = zod.array(GetReviewsResponseItem)
 
 
 /**
@@ -163,11 +760,37 @@ export const GetDashboardResponse = zod.object({
   "customer": zod.string(),
   "email": zod.string().optional(),
   "service": zod.string(),
+  "serviceId": zod.number().optional(),
   "staff": zod.string(),
+  "staffId": zod.number().optional(),
   "date": zod.string(),
   "time": zod.string(),
   "status": zod.string(),
-  "amount": zod.number()
+  "amount": zod.number(),
+  "payment": zod.object({
+  "status": zod.string(),
+  "amount": zod.number(),
+  "currency": zod.string(),
+  "provider": zod.string(),
+  "providerRef": zod.string().optional()
+})
+})),
+  "recentCustomers": zod.array(zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "email": zod.string(),
+  "phone": zod.string().optional(),
+  "initials": zod.string(),
+  "color": zod.string(),
+  "visits": zod.number(),
+  "spending": zod.number(),
+  "lastVisit": zod.string(),
+  "notes": zod.string().optional()
+})),
+  "recentActivity": zod.array(zod.object({
+  "id": zod.number(),
+  "message": zod.string(),
+  "timestamp": zod.string()
 }))
 })
 
@@ -185,6 +808,10 @@ export const GetAnalyticsResponse = zod.object({
   "value": zod.number()
 })),
   "popularServices": zod.array(zod.object({
+  "label": zod.string(),
+  "value": zod.number()
+})),
+  "staffUtilization": zod.array(zod.object({
   "label": zod.string(),
   "value": zod.number()
 })),

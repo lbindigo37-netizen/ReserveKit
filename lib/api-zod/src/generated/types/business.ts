@@ -14,4 +14,14 @@ export interface Business {
   currency: string;
   timezone: string;
   accent?: string;
+  primaryColor: string;
+  secondaryColor: string;
+  logoUrl?: string;
+  address?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  aboutTitle?: string;
+  aboutBody?: string;
+  bookingIntervalMinutes: number;
+  cancellationPolicy: string;
 }

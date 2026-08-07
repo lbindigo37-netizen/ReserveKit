@@ -5,6 +5,8 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { VacationEntry } from './vacationEntry';
+import type { WorkingHoursEntry } from './workingHoursEntry';
 
 export interface Staff {
   id: number;
@@ -12,6 +14,11 @@ export interface Staff {
   role: string;
   initials: string;
   color: string;
+  photoUrl?: string;
+  active: boolean;
   utilization: number;
   bookings: number;
+  workingHours: WorkingHoursEntry[];
+  vacations: VacationEntry[];
+  serviceIds: number[];
 }

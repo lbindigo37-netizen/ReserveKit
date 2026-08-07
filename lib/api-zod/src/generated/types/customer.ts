@@ -10,9 +10,11 @@ export interface Customer {
   id: number;
   name: string;
   email: string;
+  phone?: string;
   initials: string;
   color: string;
   visits: number;
   spending: number;
   lastVisit: string;
+  notes?: string;
 }

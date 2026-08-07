@@ -360,7 +360,11 @@ export async function customFetch<T = unknown>(
 
   const requestInfo = { method, url: resolveUrl(input) };
 
-  const response = await fetch(input, { ...init, method, headers });
+  // Include cookies on every request so browser session auth (see
+  // `artifacts/api-server/src/middlewares/session.ts`) works whether the
+  // API is same-origin (production, behind the app router) or served from
+  // a different origin/port during local development.
+  const response = await fetch(input, { credentials: "include", ...init, method, headers });
 
   if (!response.ok) {
     const errorData = await parseErrorBody(response, method);

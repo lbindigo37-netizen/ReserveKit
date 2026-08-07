@@ -5,7 +5,9 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { ActivityEntry } from './activityEntry';
 import type { Booking } from './booking';
+import type { Customer } from './customer';
 
 export interface Dashboard {
   todayAppointments: number;
@@ -13,4 +15,6 @@ export interface Dashboard {
   pending: number;
   customers: number;
   upcoming: Booking[];
+  recentCustomers: Customer[];
+  recentActivity: ActivityEntry[];
 }

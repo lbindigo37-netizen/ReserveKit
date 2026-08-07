@@ -5,15 +5,19 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { Payment } from './payment';
 
 export interface Booking {
   id: number;
   customer: string;
   email?: string;
   service: string;
+  serviceId?: number;
   staff: string;
+  staffId?: number;
   date: string;
   time: string;
   status: string;
   amount: number;
+  payment: Payment;
 }

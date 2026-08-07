@@ -11,5 +11,6 @@ export interface Analytics {
   bookingsByDay: MetricPoint[];
   revenueByMonth: MetricPoint[];
   popularServices: MetricPoint[];
+  staffUtilization: MetricPoint[];
   returningRate: number;
 }

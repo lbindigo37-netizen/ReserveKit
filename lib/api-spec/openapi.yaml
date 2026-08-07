@@ -10,8 +10,12 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication operations
   - name: booking
     description: Booking platform operations
+  - name: admin
+    description: Admin-only management operations
 paths:
   /healthz:
     get:
@@ -26,6 +30,88 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # ------------------------------------------------------------------
+  # Auth
+  # ------------------------------------------------------------------
+  /auth/signup:
+    post:
+      operationId: signup
+      tags: [auth]
+      summary: Create a customer account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupInput"
+      responses:
+        "201":
+          description: Created account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "409":
+          description: Email already in use
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Log in with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Log out the current session
+      responses:
+        "204":
+          description: Logged out
+  /auth/me:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get the currently authenticated user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ------------------------------------------------------------------
+  # Business / settings
+  # ------------------------------------------------------------------
   /business:
     get:
       operationId: getBusiness
@@ -38,11 +124,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Business"
+    patch:
+      operationId: updateBusiness
+      tags: [admin]
+      summary: Update business configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BusinessInput"
+      responses:
+        "200":
+          description: Updated business configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Business"
+
+  # ------------------------------------------------------------------
+  # Services
+  # ------------------------------------------------------------------
   /services:
     get:
       operationId: getServices
       tags: [booking]
       summary: List services
+      parameters:
+        - name: includeInactive
+          in: query
+          required: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: Services
@@ -52,6 +165,64 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Service"
+    post:
+      operationId: createService
+      tags: [admin]
+      summary: Create a service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceInput"
+      responses:
+        "201":
+          description: Created service
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+  /services/{id}:
+    patch:
+      operationId: updateService
+      tags: [admin]
+      summary: Update a service
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ServiceInput"
+      responses:
+        "200":
+          description: Updated service
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Service"
+    delete:
+      operationId: deleteService
+      tags: [admin]
+      summary: Delete a service
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "204":
+          description: Deleted
+
+  # ------------------------------------------------------------------
+  # Staff
+  # ------------------------------------------------------------------
   /staff:
     get:
       operationId: getStaff
@@ -66,10 +237,100 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Staff"
+    post:
+      operationId: createStaff
+      tags: [admin]
+      summary: Create a staff member
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffInput"
+      responses:
+        "201":
+          description: Created staff member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Staff"
+  /staff/{id}:
+    patch:
+      operationId: updateStaff
+      tags: [admin]
+      summary: Update a staff member
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StaffInput"
+      responses:
+        "200":
+          description: Updated staff member
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Staff"
+    delete:
+      operationId: deleteStaff
+      tags: [admin]
+      summary: Delete a staff member
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "204":
+          description: Deleted
+
+  # ------------------------------------------------------------------
+  # Availability
+  # ------------------------------------------------------------------
+  /availability:
+    get:
+      operationId: getAvailability
+      tags: [booking]
+      summary: Get available time slots for a service and staff member on a date
+      parameters:
+        - name: serviceId
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: staffId
+          in: query
+          required: true
+          schema:
+            type: number
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Available time slots
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AvailabilityResponse"
+
+  # ------------------------------------------------------------------
+  # Bookings
+  # ------------------------------------------------------------------
   /bookings:
     get:
       operationId: getBookings
-      tags: [booking]
+      tags: [admin]
       summary: List bookings
       parameters:
         - name: status
@@ -108,10 +369,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Booking"
+        "409":
+          description: Time slot no longer available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /bookings/mine:
+    get:
+      operationId: getMyBookings
+      tags: [booking]
+      summary: List the current customer's bookings
+      responses:
+        "200":
+          description: My bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Booking"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /bookings/{id}/status:
     patch:
       operationId: updateBookingStatus
-      tags: [booking]
+      tags: [admin]
       summary: Update booking status
       parameters:
         - name: id
@@ -132,10 +419,44 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Booking"
+  /bookings/{id}/reschedule:
+    patch:
+      operationId: rescheduleBooking
+      tags: [booking]
+      summary: Reschedule a booking to a new date and time
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RescheduleBookingInput"
+      responses:
+        "200":
+          description: Rescheduled booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+        "409":
+          description: Time slot no longer available
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  # ------------------------------------------------------------------
+  # Customers
+  # ------------------------------------------------------------------
   /customers:
     get:
       operationId: getCustomers
-      tags: [booking]
+      tags: [admin]
       summary: List customers
       responses:
         "200":
@@ -146,10 +467,179 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Customer"
+  /customers/{id}:
+    get:
+      operationId: getCustomer
+      tags: [admin]
+      summary: Get a single customer with booking history
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Customer detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDetail"
+    patch:
+      operationId: updateCustomer
+      tags: [admin]
+      summary: Update a customer's notes/contact info
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerInput"
+      responses:
+        "200":
+          description: Updated customer
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer"
+
+  # ------------------------------------------------------------------
+  # Customer self-service (profile, favorites, notifications)
+  # ------------------------------------------------------------------
+  /profile:
+    get:
+      operationId: getProfile
+      tags: [booking]
+      summary: Get the current customer's profile
+      responses:
+        "200":
+          description: Profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+    patch:
+      operationId: updateProfile
+      tags: [booking]
+      summary: Update the current customer's profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfileInput"
+      responses:
+        "200":
+          description: Updated profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+  /favorites:
+    get:
+      operationId: getFavorites
+      tags: [booking]
+      summary: List the current customer's favorite services
+      responses:
+        "200":
+          description: Favorite services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+  /favorites/{serviceId}:
+    put:
+      operationId: addFavorite
+      tags: [booking]
+      summary: Mark a service as a favorite
+      parameters:
+        - name: serviceId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "204":
+          description: Added
+    delete:
+      operationId: removeFavorite
+      tags: [booking]
+      summary: Remove a service from favorites
+      parameters:
+        - name: serviceId
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "204":
+          description: Removed
+  /notifications:
+    get:
+      operationId: getNotifications
+      tags: [booking]
+      summary: List the current user's notifications
+      responses:
+        "200":
+          description: Notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Notification"
+  /notifications/{id}/read:
+    patch:
+      operationId: markNotificationRead
+      tags: [booking]
+      summary: Mark a notification as read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Updated notification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Notification"
+
+  # ------------------------------------------------------------------
+  # Reviews
+  # ------------------------------------------------------------------
+  /reviews:
+    get:
+      operationId: getReviews
+      tags: [booking]
+      summary: List public reviews
+      responses:
+        "200":
+          description: Reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Review"
+
+  # ------------------------------------------------------------------
+  # Dashboard / analytics
+  # ------------------------------------------------------------------
   /dashboard:
     get:
       operationId: getDashboard
-      tags: [booking]
+      tags: [admin]
       summary: Get dashboard summary
       responses:
         "200":
@@ -161,7 +651,7 @@ paths:
   /analytics:
     get:
       operationId: getAnalytics
-      tags: [booking]
+      tags: [admin]
       summary: Get analytics data
       responses:
         "200":
@@ -170,8 +660,15 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Analytics"
+
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      required: [error]
+      properties:
+        error: { type: string }
+
     HealthStatus:
       type: object
       properties:
@@ -179,9 +676,46 @@ components:
           type: string
       required:
         - status
+
+    # ---------------- Auth ----------------
+    SignupInput:
+      type: object
+      required: [name, email, password]
+      properties:
+        name: { type: string }
+        email: { type: string }
+        password: { type: string }
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email: { type: string }
+        password: { type: string }
+    AuthUser:
+      type: object
+      required: [id, name, email, role]
+      properties:
+        id: { type: number }
+        name: { type: string }
+        email: { type: string }
+        role: { type: string }
+
+    # ---------------- Business ----------------
     Business:
       type: object
-      required: [name, type, tagline, bookingLabel, currency, timezone]
+      required:
+        [
+          name,
+          type,
+          tagline,
+          bookingLabel,
+          currency,
+          timezone,
+          primaryColor,
+          secondaryColor,
+          bookingIntervalMinutes,
+          cancellationPolicy,
+        ]
       properties:
         name: { type: string }
         type: { type: string }
@@ -190,58 +724,199 @@ components:
         currency: { type: string }
         timezone: { type: string }
         accent: { type: string }
+        primaryColor: { type: string }
+        secondaryColor: { type: string }
+        logoUrl: { type: string }
+        address: { type: string }
+        contactEmail: { type: string }
+        contactPhone: { type: string }
+        aboutTitle: { type: string }
+        aboutBody: { type: string }
+        bookingIntervalMinutes: { type: number }
+        cancellationPolicy: { type: string }
+    BusinessInput:
+      type: object
+      properties:
+        name: { type: string }
+        type: { type: string }
+        tagline: { type: string }
+        bookingLabel: { type: string }
+        currency: { type: string }
+        timezone: { type: string }
+        accent: { type: string }
+        primaryColor: { type: string }
+        secondaryColor: { type: string }
+        logoUrl: { type: string }
+        address: { type: string }
+        contactEmail: { type: string }
+        contactPhone: { type: string }
+        aboutTitle: { type: string }
+        aboutBody: { type: string }
+        bookingIntervalMinutes: { type: number }
+        cancellationPolicy: { type: string }
+
+    # ---------------- Services ----------------
     Service:
       type: object
-      required: [id, name, category, description, duration, price, color, popular]
+      required:
+        [id, name, category, description, duration, bufferMinutes, price, color, popular, active, staffIds]
       properties:
         id: { type: number }
         name: { type: string }
         category: { type: string }
         description: { type: string }
         duration: { type: number }
+        bufferMinutes: { type: number }
         price: { type: number }
         color: { type: string }
+        imageUrl: { type: string }
         popular: { type: boolean }
+        active: { type: boolean }
+        staffIds:
+          type: array
+          items: { type: number }
+    ServiceInput:
+      type: object
+      required: [name, category, description, duration, price, color]
+      properties:
+        name: { type: string }
+        category: { type: string }
+        description: { type: string }
+        duration: { type: number }
+        bufferMinutes: { type: number }
+        price: { type: number }
+        color: { type: string }
+        imageUrl: { type: string }
+        popular: { type: boolean }
+        active: { type: boolean }
+        staffIds:
+          type: array
+          items: { type: number }
+
+    # ---------------- Staff ----------------
+    WorkingHoursEntry:
+      type: object
+      required: [weekday, startMinute, endMinute]
+      properties:
+        weekday: { type: number }
+        startMinute: { type: number }
+        endMinute: { type: number }
+    VacationEntry:
+      type: object
+      required: [id, startDate, endDate]
+      properties:
+        id: { type: number }
+        startDate: { type: string }
+        endDate: { type: string }
+        reason: { type: string }
     Staff:
       type: object
-      required: [id, name, role, initials, color, utilization, bookings]
+      required: [id, name, role, initials, color, active, utilization, bookings, workingHours, vacations, serviceIds]
       properties:
         id: { type: number }
         name: { type: string }
         role: { type: string }
         initials: { type: string }
         color: { type: string }
+        photoUrl: { type: string }
+        active: { type: boolean }
         utilization: { type: number }
         bookings: { type: number }
+        workingHours:
+          type: array
+          items: { $ref: "#/components/schemas/WorkingHoursEntry" }
+        vacations:
+          type: array
+          items: { $ref: "#/components/schemas/VacationEntry" }
+        serviceIds:
+          type: array
+          items: { type: number }
+    StaffInput:
+      type: object
+      required: [name, role]
+      properties:
+        name: { type: string }
+        role: { type: string }
+        color: { type: string }
+        photoUrl: { type: string }
+        active: { type: boolean }
+        workingHours:
+          type: array
+          items: { $ref: "#/components/schemas/WorkingHoursEntry" }
+        vacations:
+          type: array
+          items:
+            type: object
+            required: [startDate, endDate]
+            properties:
+              startDate: { type: string }
+              endDate: { type: string }
+              reason: { type: string }
+        serviceIds:
+          type: array
+          items: { type: number }
+
+    # ---------------- Availability ----------------
+    AvailabilityResponse:
+      type: object
+      required: [date, slots]
+      properties:
+        date: { type: string }
+        slots:
+          type: array
+          items: { type: string }
+
+    # ---------------- Payments ----------------
+    Payment:
+      type: object
+      required: [status, amount, currency, provider]
+      properties:
+        status: { type: string }
+        amount: { type: number }
+        currency: { type: string }
+        provider: { type: string }
+        providerRef: { type: string }
+
+    # ---------------- Bookings ----------------
     Booking:
       type: object
-      required: [id, customer, service, staff, date, time, status, amount]
+      required: [id, customer, service, staff, date, time, status, amount, payment]
       properties:
         id: { type: number }
         customer: { type: string }
         email: { type: string }
         service: { type: string }
+        serviceId: { type: number }
         staff: { type: string }
+        staffId: { type: number }
         date: { type: string }
         time: { type: string }
         status: { type: string }
         amount: { type: number }
+        payment: { $ref: "#/components/schemas/Payment" }
     BookingInput:
       type: object
-      required: [customer, email, service, staff, date, time, amount]
+      required: [customer, email, serviceId, staffId, date, time]
       properties:
         customer: { type: string }
         email: { type: string }
-        service: { type: string }
-        staff: { type: string }
+        serviceId: { type: number }
+        staffId: { type: number }
         date: { type: string }
         time: { type: string }
-        amount: { type: number }
     BookingStatusInput:
       type: object
       required: [status]
       properties:
         status: { type: string }
+    RescheduleBookingInput:
+      type: object
+      required: [date, time]
+      properties:
+        date: { type: string }
+        time: { type: string }
+
+    # ---------------- Customers ----------------
     Customer:
       type: object
       required: [id, name, email, initials, color, visits, spending, lastVisit]
@@ -249,14 +924,67 @@ components:
         id: { type: number }
         name: { type: string }
         email: { type: string }
+        phone: { type: string }
         initials: { type: string }
         color: { type: string }
         visits: { type: number }
         spending: { type: number }
         lastVisit: { type: string }
+        notes: { type: string }
+    CustomerDetail:
+      type: object
+      required: [customer, bookings]
+      properties:
+        customer: { $ref: "#/components/schemas/Customer" }
+        bookings:
+          type: array
+          items: { $ref: "#/components/schemas/Booking" }
+    CustomerInput:
+      type: object
+      properties:
+        phone: { type: string }
+        notes: { type: string }
+
+    # ---------------- Profile / favorites / notifications ----------------
+    Profile:
+      type: object
+      required: [id, name, email]
+      properties:
+        id: { type: number }
+        name: { type: string }
+        email: { type: string }
+        phone: { type: string }
+    ProfileInput:
+      type: object
+      properties:
+        name: { type: string }
+        phone: { type: string }
+    Notification:
+      type: object
+      required: [id, type, title, body, read, createdAt]
+      properties:
+        id: { type: number }
+        type: { type: string }
+        title: { type: string }
+        body: { type: string }
+        read: { type: boolean }
+        createdAt: { type: string }
+
+    # ---------------- Reviews ----------------
+    Review:
+      type: object
+      required: [id, customerName, rating, comment]
+      properties:
+        id: { type: number }
+        customerName: { type: string }
+        rating: { type: number }
+        comment: { type: string }
+        serviceName: { type: string }
+
+    # ---------------- Dashboard / analytics ----------------
     Dashboard:
       type: object
-      required: [todayAppointments, revenue, pending, customers, upcoming]
+      required: [todayAppointments, revenue, pending, customers, upcoming, recentCustomers, recentActivity]
       properties:
         todayAppointments: { type: number }
         revenue: { type: number }
@@ -265,9 +993,22 @@ components:
         upcoming:
           type: array
           items: { $ref: "#/components/schemas/Booking" }
+        recentCustomers:
+          type: array
+          items: { $ref: "#/components/schemas/Customer" }
+        recentActivity:
+          type: array
+          items: { $ref: "#/components/schemas/ActivityEntry" }
+    ActivityEntry:
+      type: object
+      required: [id, message, timestamp]
+      properties:
+        id: { type: number }
+        message: { type: string }
+        timestamp: { type: string }
     Analytics:
       type: object
-      required: [bookingsByDay, revenueByMonth, popularServices, returningRate]
+      required: [bookingsByDay, revenueByMonth, popularServices, returningRate, staffUtilization]
       properties:
         bookingsByDay:
           type: array
@@ -281,6 +1022,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MetricPoint"
+        staffUtilization:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetricPoint"
         returningRate: { type: number }
     MetricPoint:
       type: object
@@ -288,4 +1033,3 @@ components:
       properties:
         label: { type: string }
         value: { type: number }
-

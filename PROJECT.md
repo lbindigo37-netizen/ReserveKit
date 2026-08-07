@@ -1,0 +1,422 @@
+Build a production-quality SaaS web application called "ReserveKit".
+
+BookingOS is a white-label booking platform template designed for local businesses. The goal is to create a reusable starter template that can easily be adapted for salons, clinics, pet grooming, sports courts, photography studios, coworking spaces, massage centers, and other appointment-based businesses.
+
+The application should feel like a polished commercial SaaS product rather than a demo.
+
+==================================
+GENERAL REQUIREMENTS
+==================================
+
+- Modern responsive UI
+- Light and Dark mode
+- Mobile-first design
+- Professional dashboard
+- Beautiful animations
+- Empty states
+- Loading skeletons
+- Toast notifications
+- Accessible components
+- Clean spacing and typography
+- Consistent design system
+
+Use reusable components throughout the application.
+
+==================================
+AUTHENTICATION
+==================================
+
+Support two roles:
+
+1. Customer
+2. Admin
+
+Customers can:
+- Book appointments
+- View booking history
+- Manage profile
+
+Admins can:
+- Manage bookings
+- Manage staff
+- Manage services
+- View analytics
+- Configure business settings
+
+==================================
+PUBLIC WEBSITE
+==================================
+
+Create a public-facing website including:
+
+- Hero section
+- About business
+- Services
+- Staff members
+- Testimonials
+- FAQ
+- Contact section
+- Booking CTA
+
+Navigation should include:
+
+Home
+Services
+Book Now
+About
+Contact
+
+==================================
+CUSTOMER BOOKING FLOW
+==================================
+
+Implement a complete booking flow.
+
+Step 1
+Choose service
+
+Step 2
+Choose staff member
+
+Step 3
+Choose date
+
+Step 4
+Choose available time slot
+
+Step 5
+Enter customer information
+
+Step 6
+Booking confirmation
+
+Display a success page after booking.
+
+==================================
+CUSTOMER DASHBOARD
+==================================
+
+Include:
+
+Dashboard
+
+Upcoming appointments
+
+Appointment history
+
+Favorite services
+
+Profile
+
+Notification center
+
+==================================
+ADMIN DASHBOARD
+==================================
+
+Dashboard should include:
+
+Today's appointments
+
+Revenue cards
+
+Upcoming bookings
+
+Popular services
+
+Staff utilization
+
+Recent customers
+
+Recent activity
+
+Analytics charts
+
+==================================
+BOOKING MANAGEMENT
+==================================
+
+Admin can:
+
+View bookings
+
+Search bookings
+
+Filter by status
+
+Approve bookings
+
+Cancel bookings
+
+Reschedule bookings
+
+Mark completed
+
+Booking statuses:
+
+Pending
+
+Confirmed
+
+Completed
+
+Cancelled
+
+==================================
+STAFF MANAGEMENT
+==================================
+
+Each staff member has:
+
+Photo
+
+Name
+
+Role
+
+Working hours
+
+Services offered
+
+Availability
+
+Vacation dates
+
+Performance statistics
+
+==================================
+SERVICE MANAGEMENT
+==================================
+
+Each service includes:
+
+Image
+
+Title
+
+Description
+
+Duration
+
+Price
+
+Category
+
+Assigned staff
+
+Booking buffer time
+
+Active/inactive status
+
+==================================
+CUSTOMER MANAGEMENT
+==================================
+
+Store customer profiles.
+
+Include:
+
+Contact information
+
+Booking history
+
+Total visits
+
+Lifetime spending
+
+Notes
+
+==================================
+BUSINESS SETTINGS
+==================================
+
+Business settings page should include:
+
+Business name
+
+Logo
+
+Primary color
+
+Secondary color
+
+Business type
+
+Currency
+
+Timezone
+
+Working hours
+
+Booking interval
+
+Cancellation policy
+
+==================================
+WHITE LABEL TEMPLATE
+==================================
+
+This is the most important feature.
+
+The application must be configurable for multiple business types.
+
+Business types include:
+
+Salon
+
+Clinic
+
+Pet Grooming
+
+Photography Studio
+
+Sports Court
+
+Coworking Space
+
+Massage Spa
+
+Changing the business type should automatically update:
+
+Icons
+
+Terminology
+
+Example services
+
+Dashboard labels
+
+Booking wording
+
+For example:
+
+Salon:
+Book Stylist
+
+Clinic:
+Book Doctor
+
+Pet Grooming:
+Book Groomer
+
+Sports:
+Reserve Court
+
+Coworking:
+Reserve Workspace
+
+The application should be structured so changing branding and business type requires minimal configuration.
+
+==================================
+ANALYTICS
+==================================
+
+Dashboard should include charts for:
+
+Bookings by day
+
+Revenue
+
+Popular services
+
+Returning customers
+
+Staff utilization
+
+==================================
+PAYMENTS
+==================================
+
+Design the application with Stripe integration in mind.
+
+Include:
+
+Invoices
+
+Payment status
+
+Paid
+
+Pending
+
+Refunded
+
+If Stripe keys are unavailable, use realistic mock payment data.
+
+==================================
+EMAILS
+==================================
+
+Design for Resend integration.
+
+Generate email templates for:
+
+Booking confirmation
+
+Booking reminder
+
+Booking cancelled
+
+Booking completed
+
+==================================
+SAMPLE DATA
+==================================
+
+Populate the application with realistic demo data.
+
+Include:
+
+20 customers
+
+8 staff members
+
+30 bookings
+
+10 services
+
+Revenue statistics
+
+Reviews
+
+Notifications
+
+Everything should look realistic.
+
+==================================
+DESIGN SYSTEM
+==================================
+
+Create reusable components including:
+
+Buttons
+
+Cards
+
+Inputs
+
+Tables
+
+Dialogs
+
+Badges
+
+Avatars
+
+Charts
+
+Calendar
+
+Sidebar
+
+Navbar
+
+Empty state
+
+Loading state
+
+==================================
+FINAL GOAL
+==================================
+
+The finished application should feel like a premium SaaS starter template that someone could immediately remix into a booking platform for their own local business.
