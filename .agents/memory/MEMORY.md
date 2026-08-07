@@ -1,0 +1,1 @@
+- [OpenAPI integer schemas](openapi-integer-schemas.md) — this workspace's Zod generator currently emits unsupported zod.int(); use number schemas for generated contracts.

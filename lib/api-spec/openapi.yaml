@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: booking
+    description: Booking platform operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,150 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /business:
+    get:
+      operationId: getBusiness
+      tags: [booking]
+      summary: Get business configuration
+      responses:
+        "200":
+          description: Business configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Business"
+  /services:
+    get:
+      operationId: getServices
+      tags: [booking]
+      summary: List services
+      responses:
+        "200":
+          description: Services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+  /staff:
+    get:
+      operationId: getStaff
+      tags: [booking]
+      summary: List staff
+      responses:
+        "200":
+          description: Staff members
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Staff"
+  /bookings:
+    get:
+      operationId: getBookings
+      tags: [booking]
+      summary: List bookings
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Bookings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Booking"
+    post:
+      operationId: createBooking
+      tags: [booking]
+      summary: Create a booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingInput"
+      responses:
+        "201":
+          description: Created booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+  /bookings/{id}/status:
+    patch:
+      operationId: updateBookingStatus
+      tags: [booking]
+      summary: Update booking status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BookingStatusInput"
+      responses:
+        "200":
+          description: Updated booking
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Booking"
+  /customers:
+    get:
+      operationId: getCustomers
+      tags: [booking]
+      summary: List customers
+      responses:
+        "200":
+          description: Customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Customer"
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [booking]
+      summary: Get dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+  /analytics:
+    get:
+      operationId: getAnalytics
+      tags: [booking]
+      summary: Get analytics data
+      responses:
+        "200":
+          description: Analytics data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Analytics"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +179,113 @@ components:
           type: string
       required:
         - status
+    Business:
+      type: object
+      required: [name, type, tagline, bookingLabel, currency, timezone]
+      properties:
+        name: { type: string }
+        type: { type: string }
+        tagline: { type: string }
+        bookingLabel: { type: string }
+        currency: { type: string }
+        timezone: { type: string }
+        accent: { type: string }
+    Service:
+      type: object
+      required: [id, name, category, description, duration, price, color, popular]
+      properties:
+        id: { type: number }
+        name: { type: string }
+        category: { type: string }
+        description: { type: string }
+        duration: { type: number }
+        price: { type: number }
+        color: { type: string }
+        popular: { type: boolean }
+    Staff:
+      type: object
+      required: [id, name, role, initials, color, utilization, bookings]
+      properties:
+        id: { type: number }
+        name: { type: string }
+        role: { type: string }
+        initials: { type: string }
+        color: { type: string }
+        utilization: { type: number }
+        bookings: { type: number }
+    Booking:
+      type: object
+      required: [id, customer, service, staff, date, time, status, amount]
+      properties:
+        id: { type: number }
+        customer: { type: string }
+        email: { type: string }
+        service: { type: string }
+        staff: { type: string }
+        date: { type: string }
+        time: { type: string }
+        status: { type: string }
+        amount: { type: number }
+    BookingInput:
+      type: object
+      required: [customer, email, service, staff, date, time, amount]
+      properties:
+        customer: { type: string }
+        email: { type: string }
+        service: { type: string }
+        staff: { type: string }
+        date: { type: string }
+        time: { type: string }
+        amount: { type: number }
+    BookingStatusInput:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string }
+    Customer:
+      type: object
+      required: [id, name, email, initials, color, visits, spending, lastVisit]
+      properties:
+        id: { type: number }
+        name: { type: string }
+        email: { type: string }
+        initials: { type: string }
+        color: { type: string }
+        visits: { type: number }
+        spending: { type: number }
+        lastVisit: { type: string }
+    Dashboard:
+      type: object
+      required: [todayAppointments, revenue, pending, customers, upcoming]
+      properties:
+        todayAppointments: { type: number }
+        revenue: { type: number }
+        pending: { type: number }
+        customers: { type: number }
+        upcoming:
+          type: array
+          items: { $ref: "#/components/schemas/Booking" }
+    Analytics:
+      type: object
+      required: [bookingsByDay, revenueByMonth, popularServices, returningRate]
+      properties:
+        bookingsByDay:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetricPoint"
+        revenueByMonth:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetricPoint"
+        popularServices:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetricPoint"
+        returningRate: { type: number }
+    MetricPoint:
+      type: object
+      required: [label, value]
+      properties:
+        label: { type: string }
+        value: { type: number }
 
