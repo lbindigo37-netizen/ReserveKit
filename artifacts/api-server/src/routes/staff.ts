@@ -129,7 +129,7 @@ router.delete("/staff/:id", requireAdmin, async (req, res) => {
 async function applyStaffAssociations(
   staffId: number,
   workingHours: { weekday: number; startMinute: number; endMinute: number }[] | undefined,
-  vacations: { startDate: string; endDate: string; reason?: string }[] | undefined,
+  vacations: { startDate: string; endDate: string; reason?: string | null }[] | undefined,
   serviceIds: number[] | undefined,
 ): Promise<void> {
   if (workingHours !== undefined) {

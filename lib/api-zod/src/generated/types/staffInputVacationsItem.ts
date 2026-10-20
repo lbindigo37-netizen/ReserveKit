@@ -9,5 +9,6 @@
 export type StaffInputVacationsItem = {
   startDate: string;
   endDate: string;
-  reason?: string;
+  /** @nullable */
+  reason?: string | null;
 };

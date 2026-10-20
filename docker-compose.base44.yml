@@ -1,0 +1,141 @@
+# Base44 development stack for ReserveKit.
+#
+# - Builds nothing from the app source: the repo is bind-mounted at /app and
+#   every app service runs the project's own dev command, so edits are live.
+# - Postgres runs as a local compose service; credentials are dev-only.
+# - External integrations (Stripe, Resend) are optional: the API falls back to
+#   mock payments and logged emails when no keys are present. Any keys supplied
+#   through the Base44 dashboard arrive in /run/base44/app.env, which is loaded
+#   LAST so dashboard values always win.
+#
+# Usage: docker compose -f docker-compose.base44.yml up -d --build
+# Seed demo data once: docker compose -f docker-compose.base44.yml run --rm seed
+
+name: reservekit
+
+x-app: &app
+  build:
+    context: .
+    dockerfile: .base44/node.Dockerfile
+  working_dir: /app
+  volumes:
+    - .:/app
+  restart: on-failure
+
+x-database-url: &database-url postgres://reservekit:reservekit-dev@db:5432/reservekit
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: reservekit
+      POSTGRES_PASSWORD: reservekit-dev
+      POSTGRES_DB: reservekit
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reservekit -d reservekit"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: on-failure
+
+  # Installs workspace dependencies into the bind-mounted checkout once the
+  # mounts exist, so api/web never run concurrent installers.
+  install:
+    <<: *app
+    environment:
+      CI: "true"
+    command: ["sh", "-ec", "pnpm install --frozen-lockfile"]
+    restart: "no"
+
+  # Creates/updates the schema from lib/db/src/schema. Exits when done.
+  db-push:
+    <<: *app
+    depends_on:
+      db:
+        condition: service_healthy
+      install:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: *database-url
+    command: ["sh", "-ec", "pnpm --filter @workspace/db run push-force"]
+    restart: "no"
+
+  api:
+    <<: *app
+    depends_on:
+      db:
+        condition: service_healthy
+      db-push:
+        condition: service_completed_successfully
+    environment:
+      PORT: "5000"
+      NODE_ENV: development
+      DATABASE_URL: *database-url
+      BASE44_PREVIEW_MODE: ${BASE44_PREVIEW_MODE:-}
+    env_file:
+      - /run/base44/app.env
+    command: ["sh", "-ec", "exec pnpm --filter @workspace/api-server run dev"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:5000/api/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 90s
+
+  # Vite dev server. Serves the SPA on host port 3000 and proxies /api to the
+  # API service, so session cookies stay same-origin.
+  web:
+    <<: *app
+    depends_on:
+      install:
+        condition: service_completed_successfully
+      api:
+        condition: service_started
+    environment:
+      PORT: "3000"
+      BASE_PATH: "/"
+      NODE_ENV: development
+      API_PROXY_TARGET: http://api:5000
+      BASE44_PREVIEW_MODE: ${BASE44_PREVIEW_MODE:-}
+    ports:
+      - "3000:3000"
+    command: ["sh", "-ec", "exec pnpm --filter @workspace/reservekit run dev"]
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+
+  # Demo data (20 customers, 8 staff, 30 bookings, demo logins). Not started by
+  # `up` because the seed clears domain tables; run it explicitly:
+  #   docker compose -f docker-compose.base44.yml run --rm seed
+  seed:
+    <<: *app
+    profiles: ["tools"]
+    depends_on:
+      db:
+        condition: service_healthy
+      db-push:
+        condition: service_completed_successfully
+    environment:
+      DATABASE_URL: *database-url
+    command: ["sh", "-ec", "pnpm --filter @workspace/db run seed"]
+    restart: "no"
+
+volumes:
+  db-data:

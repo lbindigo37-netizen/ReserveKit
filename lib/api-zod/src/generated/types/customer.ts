@@ -10,11 +10,13 @@ export interface Customer {
   id: number;
   name: string;
   email: string;
-  phone?: string;
+  /** @nullable */
+  phone?: string | null;
   initials: string;
   color: string;
   visits: number;
   spending: number;
   lastVisit: string;
-  notes?: string;
+  /** @nullable */
+  notes?: string | null;
 }

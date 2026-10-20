@@ -15,7 +15,8 @@ export interface Service {
   bufferMinutes: number;
   price: number;
   color: string;
-  imageUrl?: string;
+  /** @nullable */
+  imageUrl?: string | null;
   popular: boolean;
   active: boolean;
   staffIds: number[];

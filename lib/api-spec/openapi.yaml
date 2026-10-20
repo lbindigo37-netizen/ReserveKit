@@ -726,12 +726,12 @@ components:
         accent: { type: string }
         primaryColor: { type: string }
         secondaryColor: { type: string }
-        logoUrl: { type: string }
-        address: { type: string }
-        contactEmail: { type: string }
-        contactPhone: { type: string }
-        aboutTitle: { type: string }
-        aboutBody: { type: string }
+        logoUrl: { type: [string, "null"] }
+        address: { type: [string, "null"] }
+        contactEmail: { type: [string, "null"] }
+        contactPhone: { type: [string, "null"] }
+        aboutTitle: { type: [string, "null"] }
+        aboutBody: { type: [string, "null"] }
         bookingIntervalMinutes: { type: number }
         cancellationPolicy: { type: string }
     BusinessInput:
@@ -746,12 +746,12 @@ components:
         accent: { type: string }
         primaryColor: { type: string }
         secondaryColor: { type: string }
-        logoUrl: { type: string }
-        address: { type: string }
-        contactEmail: { type: string }
-        contactPhone: { type: string }
-        aboutTitle: { type: string }
-        aboutBody: { type: string }
+        logoUrl: { type: [string, "null"] }
+        address: { type: [string, "null"] }
+        contactEmail: { type: [string, "null"] }
+        contactPhone: { type: [string, "null"] }
+        aboutTitle: { type: [string, "null"] }
+        aboutBody: { type: [string, "null"] }
         bookingIntervalMinutes: { type: number }
         cancellationPolicy: { type: string }
 
@@ -769,7 +769,7 @@ components:
         bufferMinutes: { type: number }
         price: { type: number }
         color: { type: string }
-        imageUrl: { type: string }
+        imageUrl: { type: [string, "null"] }
         popular: { type: boolean }
         active: { type: boolean }
         staffIds:
@@ -786,7 +786,7 @@ components:
         bufferMinutes: { type: number }
         price: { type: number }
         color: { type: string }
-        imageUrl: { type: string }
+        imageUrl: { type: [string, "null"] }
         popular: { type: boolean }
         active: { type: boolean }
         staffIds:
@@ -808,7 +808,7 @@ components:
         id: { type: number }
         startDate: { type: string }
         endDate: { type: string }
-        reason: { type: string }
+        reason: { type: [string, "null"] }
     Staff:
       type: object
       required: [id, name, role, initials, color, active, utilization, bookings, workingHours, vacations, serviceIds]
@@ -818,7 +818,7 @@ components:
         role: { type: string }
         initials: { type: string }
         color: { type: string }
-        photoUrl: { type: string }
+        photoUrl: { type: [string, "null"] }
         active: { type: boolean }
         utilization: { type: number }
         bookings: { type: number }
@@ -838,7 +838,7 @@ components:
         name: { type: string }
         role: { type: string }
         color: { type: string }
-        photoUrl: { type: string }
+        photoUrl: { type: [string, "null"] }
         active: { type: boolean }
         workingHours:
           type: array
@@ -851,7 +851,7 @@ components:
             properties:
               startDate: { type: string }
               endDate: { type: string }
-              reason: { type: string }
+              reason: { type: [string, "null"] }
         serviceIds:
           type: array
           items: { type: number }
@@ -875,7 +875,7 @@ components:
         amount: { type: number }
         currency: { type: string }
         provider: { type: string }
-        providerRef: { type: string }
+        providerRef: { type: [string, "null"] }
 
     # ---------------- Bookings ----------------
     Booking:
@@ -924,13 +924,13 @@ components:
         id: { type: number }
         name: { type: string }
         email: { type: string }
-        phone: { type: string }
+        phone: { type: [string, "null"] }
         initials: { type: string }
         color: { type: string }
         visits: { type: number }
         spending: { type: number }
         lastVisit: { type: string }
-        notes: { type: string }
+        notes: { type: [string, "null"] }
     CustomerDetail:
       type: object
       required: [customer, bookings]
@@ -942,8 +942,8 @@ components:
     CustomerInput:
       type: object
       properties:
-        phone: { type: string }
-        notes: { type: string }
+        phone: { type: [string, "null"] }
+        notes: { type: [string, "null"] }
 
     # ---------------- Profile / favorites / notifications ----------------
     Profile:
@@ -953,12 +953,12 @@ components:
         id: { type: number }
         name: { type: string }
         email: { type: string }
-        phone: { type: string }
+        phone: { type: [string, "null"] }
     ProfileInput:
       type: object
       properties:
         name: { type: string }
-        phone: { type: string }
+        phone: { type: [string, "null"] }
     Notification:
       type: object
       required: [id, type, title, body, read, createdAt]

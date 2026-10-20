@@ -16,12 +16,18 @@ export interface Business {
   accent?: string;
   primaryColor: string;
   secondaryColor: string;
-  logoUrl?: string;
-  address?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  aboutTitle?: string;
-  aboutBody?: string;
+  /** @nullable */
+  logoUrl?: string | null;
+  /** @nullable */
+  address?: string | null;
+  /** @nullable */
+  contactEmail?: string | null;
+  /** @nullable */
+  contactPhone?: string | null;
+  /** @nullable */
+  aboutTitle?: string | null;
+  /** @nullable */
+  aboutBody?: string | null;
   bookingIntervalMinutes: number;
   cancellationPolicy: string;
 }

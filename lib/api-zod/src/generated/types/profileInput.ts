@@ -8,5 +8,6 @@
 
 export interface ProfileInput {
   name?: string;
-  phone?: string;
+  /** @nullable */
+  phone?: string | null;
 }

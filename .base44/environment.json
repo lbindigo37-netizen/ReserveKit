@@ -1,0 +1,22 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/",
+  "startCommand": "docker compose -f docker-compose.base44.yml up -d",
+  "secrets": [
+    {
+      "name": "STRIPE_SECRET_KEY",
+      "description": "Optional. Stripe secret key for real payments; without it bookings use mock payments.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "RESEND_API_KEY",
+      "description": "Optional. Resend API key for real booking emails; without it emails are logged instead of sent.",
+      "requiredAtBoot": false
+    },
+    {
+      "name": "RESEND_FROM_EMAIL",
+      "description": "Optional. Sender address used with Resend (defaults to bookings@resend.dev).",
+      "requiredAtBoot": false
+    }
+  ]
+}

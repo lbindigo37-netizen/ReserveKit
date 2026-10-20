@@ -27,6 +27,14 @@ if (!basePath) {
   );
 }
 
+// When set (e.g. in the docker compose dev stack), /api is proxied to a
+// separate API server so the browser talks to a single origin and session
+// cookies stay first-party.
+const apiProxyTarget = process.env.API_PROXY_TARGET;
+const proxy = apiProxyTarget
+  ? { '/api': { target: apiProxyTarget, changeOrigin: true } }
+  : undefined;
+
 export default defineConfig({
   base: basePath,
   plugins: [
@@ -69,6 +77,7 @@ export default defineConfig({
     strictPort: true,
     host: '0.0.0.0',
     allowedHosts: true,
+    proxy,
     fs: {
       strict: true,
     },
@@ -77,5 +86,6 @@ export default defineConfig({
     port,
     host: '0.0.0.0',
     allowedHosts: true,
+    proxy,
   },
 });

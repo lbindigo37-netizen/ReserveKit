@@ -12,7 +12,8 @@ export interface StaffInput {
   name: string;
   role: string;
   color?: string;
-  photoUrl?: string;
+  /** @nullable */
+  photoUrl?: string | null;
   active?: boolean;
   workingHours?: WorkingHoursEntry[];
   vacations?: StaffInputVacationsItem[];

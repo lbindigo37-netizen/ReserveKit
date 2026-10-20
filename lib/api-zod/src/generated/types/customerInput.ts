@@ -7,6 +7,8 @@
  */
 
 export interface CustomerInput {
-  phone?: string;
-  notes?: string;
+  /** @nullable */
+  phone?: string | null;
+  /** @nullable */
+  notes?: string | null;
 }

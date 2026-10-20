@@ -16,6 +16,17 @@ import {
   usersTable,
 } from "./schema";
 
+// Demo bookings and vacations are dated relative to the day the seed runs so
+// the dashboard, availability, and "upcoming" views always look current.
+const today = new Date();
+today.setUTCHours(0, 0, 0, 0);
+
+function isoDate(offsetDays: number): string {
+  const date = new Date(today);
+  date.setUTCDate(date.getUTCDate() + offsetDays);
+  return date.toISOString().slice(0, 10);
+}
+
 /**
  * Populates the database with realistic demo data matching the counts
  * called out in PROJECT.md (20 customers, 8 staff, 30 bookings, 10
@@ -99,8 +110,8 @@ async function seed(): Promise<void> {
   // One staff member has an upcoming vacation, to exercise that code path.
   await db.insert(staffVacationsTable).values({
     staffId: staffRows[2].id,
-    startDate: "2026-08-17",
-    endDate: "2026-08-21",
+    startDate: isoDate(3),
+    endDate: isoDate(7),
     reason: "Vacation",
   });
 
@@ -174,8 +185,6 @@ async function seed(): Promise<void> {
   const statuses = ["confirmed", "confirmed", "pending", "completed", "confirmed", "cancelled"] as const;
   const dateOffsets = [0, 0, 0, 1, 1, 2, 3, 4, 5, -1, -2, -3];
   const startTimesMinutes = [9 * 60, 10 * 60 + 30, 11 * 60, 12 * 60 + 30, 13 * 60, 14 * 60 + 30, 15 * 60, 16 * 60 + 30];
-
-  const today = new Date("2026-08-07T00:00:00Z");
 
   for (let index = 0; index < 30; index++) {
     const customer = customerRows[index % customerRows.length];

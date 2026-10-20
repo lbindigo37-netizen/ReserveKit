@@ -80,12 +80,12 @@ export const GetBusinessResponse = zod.object({
   "accent": zod.string().optional(),
   "primaryColor": zod.string(),
   "secondaryColor": zod.string(),
-  "logoUrl": zod.string().optional(),
-  "address": zod.string().optional(),
-  "contactEmail": zod.string().optional(),
-  "contactPhone": zod.string().optional(),
-  "aboutTitle": zod.string().optional(),
-  "aboutBody": zod.string().optional(),
+  "logoUrl": zod.string().nullish(),
+  "address": zod.string().nullish(),
+  "contactEmail": zod.string().nullish(),
+  "contactPhone": zod.string().nullish(),
+  "aboutTitle": zod.string().nullish(),
+  "aboutBody": zod.string().nullish(),
   "bookingIntervalMinutes": zod.number(),
   "cancellationPolicy": zod.string()
 })
@@ -104,12 +104,12 @@ export const UpdateBusinessBody = zod.object({
   "accent": zod.string().optional(),
   "primaryColor": zod.string().optional(),
   "secondaryColor": zod.string().optional(),
-  "logoUrl": zod.string().optional(),
-  "address": zod.string().optional(),
-  "contactEmail": zod.string().optional(),
-  "contactPhone": zod.string().optional(),
-  "aboutTitle": zod.string().optional(),
-  "aboutBody": zod.string().optional(),
+  "logoUrl": zod.string().nullish(),
+  "address": zod.string().nullish(),
+  "contactEmail": zod.string().nullish(),
+  "contactPhone": zod.string().nullish(),
+  "aboutTitle": zod.string().nullish(),
+  "aboutBody": zod.string().nullish(),
   "bookingIntervalMinutes": zod.number().optional(),
   "cancellationPolicy": zod.string().optional()
 })
@@ -124,12 +124,12 @@ export const UpdateBusinessResponse = zod.object({
   "accent": zod.string().optional(),
   "primaryColor": zod.string(),
   "secondaryColor": zod.string(),
-  "logoUrl": zod.string().optional(),
-  "address": zod.string().optional(),
-  "contactEmail": zod.string().optional(),
-  "contactPhone": zod.string().optional(),
-  "aboutTitle": zod.string().optional(),
-  "aboutBody": zod.string().optional(),
+  "logoUrl": zod.string().nullish(),
+  "address": zod.string().nullish(),
+  "contactEmail": zod.string().nullish(),
+  "contactPhone": zod.string().nullish(),
+  "aboutTitle": zod.string().nullish(),
+  "aboutBody": zod.string().nullish(),
   "bookingIntervalMinutes": zod.number(),
   "cancellationPolicy": zod.string()
 })
@@ -151,7 +151,7 @@ export const GetServicesResponseItem = zod.object({
   "bufferMinutes": zod.number(),
   "price": zod.number(),
   "color": zod.string(),
-  "imageUrl": zod.string().optional(),
+  "imageUrl": zod.string().nullish(),
   "popular": zod.boolean(),
   "active": zod.boolean(),
   "staffIds": zod.array(zod.number())
@@ -170,7 +170,7 @@ export const CreateServiceBody = zod.object({
   "bufferMinutes": zod.number().optional(),
   "price": zod.number(),
   "color": zod.string(),
-  "imageUrl": zod.string().optional(),
+  "imageUrl": zod.string().nullish(),
   "popular": zod.boolean().optional(),
   "active": zod.boolean().optional(),
   "staffIds": zod.array(zod.number()).optional()
@@ -185,7 +185,7 @@ export const CreateServiceResponse = zod.object({
   "bufferMinutes": zod.number(),
   "price": zod.number(),
   "color": zod.string(),
-  "imageUrl": zod.string().optional(),
+  "imageUrl": zod.string().nullish(),
   "popular": zod.boolean(),
   "active": zod.boolean(),
   "staffIds": zod.array(zod.number())
@@ -207,7 +207,7 @@ export const UpdateServiceBody = zod.object({
   "bufferMinutes": zod.number().optional(),
   "price": zod.number(),
   "color": zod.string(),
-  "imageUrl": zod.string().optional(),
+  "imageUrl": zod.string().nullish(),
   "popular": zod.boolean().optional(),
   "active": zod.boolean().optional(),
   "staffIds": zod.array(zod.number()).optional()
@@ -222,7 +222,7 @@ export const UpdateServiceResponse = zod.object({
   "bufferMinutes": zod.number(),
   "price": zod.number(),
   "color": zod.string(),
-  "imageUrl": zod.string().optional(),
+  "imageUrl": zod.string().nullish(),
   "popular": zod.boolean(),
   "active": zod.boolean(),
   "staffIds": zod.array(zod.number())
@@ -248,7 +248,7 @@ export const GetStaffResponseItem = zod.object({
   "role": zod.string(),
   "initials": zod.string(),
   "color": zod.string(),
-  "photoUrl": zod.string().optional(),
+  "photoUrl": zod.string().nullish(),
   "active": zod.boolean(),
   "utilization": zod.number(),
   "bookings": zod.number(),
@@ -261,7 +261,7 @@ export const GetStaffResponseItem = zod.object({
   "id": zod.number(),
   "startDate": zod.string(),
   "endDate": zod.string(),
-  "reason": zod.string().optional()
+  "reason": zod.string().nullish()
 })),
   "serviceIds": zod.array(zod.number())
 })
@@ -275,7 +275,7 @@ export const CreateStaffBody = zod.object({
   "name": zod.string(),
   "role": zod.string(),
   "color": zod.string().optional(),
-  "photoUrl": zod.string().optional(),
+  "photoUrl": zod.string().nullish(),
   "active": zod.boolean().optional(),
   "workingHours": zod.array(zod.object({
   "weekday": zod.number(),
@@ -285,7 +285,7 @@ export const CreateStaffBody = zod.object({
   "vacations": zod.array(zod.object({
   "startDate": zod.string(),
   "endDate": zod.string(),
-  "reason": zod.string().optional()
+  "reason": zod.string().nullish()
 })).optional(),
   "serviceIds": zod.array(zod.number()).optional()
 })
@@ -296,7 +296,7 @@ export const CreateStaffResponse = zod.object({
   "role": zod.string(),
   "initials": zod.string(),
   "color": zod.string(),
-  "photoUrl": zod.string().optional(),
+  "photoUrl": zod.string().nullish(),
   "active": zod.boolean(),
   "utilization": zod.number(),
   "bookings": zod.number(),
@@ -309,7 +309,7 @@ export const CreateStaffResponse = zod.object({
   "id": zod.number(),
   "startDate": zod.string(),
   "endDate": zod.string(),
-  "reason": zod.string().optional()
+  "reason": zod.string().nullish()
 })),
   "serviceIds": zod.array(zod.number())
 })
@@ -326,7 +326,7 @@ export const UpdateStaffBody = zod.object({
   "name": zod.string(),
   "role": zod.string(),
   "color": zod.string().optional(),
-  "photoUrl": zod.string().optional(),
+  "photoUrl": zod.string().nullish(),
   "active": zod.boolean().optional(),
   "workingHours": zod.array(zod.object({
   "weekday": zod.number(),
@@ -336,7 +336,7 @@ export const UpdateStaffBody = zod.object({
   "vacations": zod.array(zod.object({
   "startDate": zod.string(),
   "endDate": zod.string(),
-  "reason": zod.string().optional()
+  "reason": zod.string().nullish()
 })).optional(),
   "serviceIds": zod.array(zod.number()).optional()
 })
@@ -347,7 +347,7 @@ export const UpdateStaffResponse = zod.object({
   "role": zod.string(),
   "initials": zod.string(),
   "color": zod.string(),
-  "photoUrl": zod.string().optional(),
+  "photoUrl": zod.string().nullish(),
   "active": zod.boolean(),
   "utilization": zod.number(),
   "bookings": zod.number(),
@@ -360,7 +360,7 @@ export const UpdateStaffResponse = zod.object({
   "id": zod.number(),
   "startDate": zod.string(),
   "endDate": zod.string(),
-  "reason": zod.string().optional()
+  "reason": zod.string().nullish()
 })),
   "serviceIds": zod.array(zod.number())
 })
@@ -416,7 +416,7 @@ export const GetBookingsResponseItem = zod.object({
   "amount": zod.number(),
   "currency": zod.string(),
   "provider": zod.string(),
-  "providerRef": zod.string().optional()
+  "providerRef": zod.string().nullish()
 })
 })
 export const GetBookingsResponse = zod.array(GetBookingsResponseItem)
@@ -451,7 +451,7 @@ export const CreateBookingResponse = zod.object({
   "amount": zod.number(),
   "currency": zod.string(),
   "provider": zod.string(),
-  "providerRef": zod.string().optional()
+  "providerRef": zod.string().nullish()
 })
 })
 
@@ -476,7 +476,7 @@ export const GetMyBookingsResponseItem = zod.object({
   "amount": zod.number(),
   "currency": zod.string(),
   "provider": zod.string(),
-  "providerRef": zod.string().optional()
+  "providerRef": zod.string().nullish()
 })
 })
 export const GetMyBookingsResponse = zod.array(GetMyBookingsResponseItem)
@@ -510,7 +510,7 @@ export const UpdateBookingStatusResponse = zod.object({
   "amount": zod.number(),
   "currency": zod.string(),
   "provider": zod.string(),
-  "providerRef": zod.string().optional()
+  "providerRef": zod.string().nullish()
 })
 })
 
@@ -544,7 +544,7 @@ export const RescheduleBookingResponse = zod.object({
   "amount": zod.number(),
   "currency": zod.string(),
   "provider": zod.string(),
-  "providerRef": zod.string().optional()
+  "providerRef": zod.string().nullish()
 })
 })
 
@@ -556,13 +556,13 @@ export const GetCustomersResponseItem = zod.object({
   "id": zod.number(),
   "name": zod.string(),
   "email": zod.string(),
-  "phone": zod.string().optional(),
+  "phone": zod.string().nullish(),
   "initials": zod.string(),
   "color": zod.string(),
   "visits": zod.number(),
   "spending": zod.number(),
   "lastVisit": zod.string(),
-  "notes": zod.string().optional()
+  "notes": zod.string().nullish()
 })
 export const GetCustomersResponse = zod.array(GetCustomersResponseItem)
 
@@ -579,13 +579,13 @@ export const GetCustomerResponse = zod.object({
   "id": zod.number(),
   "name": zod.string(),
   "email": zod.string(),
-  "phone": zod.string().optional(),
+  "phone": zod.string().nullish(),
   "initials": zod.string(),
   "color": zod.string(),
   "visits": zod.number(),
   "spending": zod.number(),
   "lastVisit": zod.string(),
-  "notes": zod.string().optional()
+  "notes": zod.string().nullish()
 }),
   "bookings": zod.array(zod.object({
   "id": zod.number(),
@@ -604,7 +604,7 @@ export const GetCustomerResponse = zod.object({
   "amount": zod.number(),
   "currency": zod.string(),
   "provider": zod.string(),
-  "providerRef": zod.string().optional()
+  "providerRef": zod.string().nullish()
 })
 }))
 })
@@ -618,21 +618,21 @@ export const UpdateCustomerParams = zod.object({
 })
 
 export const UpdateCustomerBody = zod.object({
-  "phone": zod.string().optional(),
-  "notes": zod.string().optional()
+  "phone": zod.string().nullish(),
+  "notes": zod.string().nullish()
 })
 
 export const UpdateCustomerResponse = zod.object({
   "id": zod.number(),
   "name": zod.string(),
   "email": zod.string(),
-  "phone": zod.string().optional(),
+  "phone": zod.string().nullish(),
   "initials": zod.string(),
   "color": zod.string(),
   "visits": zod.number(),
   "spending": zod.number(),
   "lastVisit": zod.string(),
-  "notes": zod.string().optional()
+  "notes": zod.string().nullish()
 })
 
 
@@ -643,7 +643,7 @@ export const GetProfileResponse = zod.object({
   "id": zod.number(),
   "name": zod.string(),
   "email": zod.string(),
-  "phone": zod.string().optional()
+  "phone": zod.string().nullish()
 })
 
 
@@ -652,14 +652,14 @@ export const GetProfileResponse = zod.object({
  */
 export const UpdateProfileBody = zod.object({
   "name": zod.string().optional(),
-  "phone": zod.string().optional()
+  "phone": zod.string().nullish()
 })
 
 export const UpdateProfileResponse = zod.object({
   "id": zod.number(),
   "name": zod.string(),
   "email": zod.string(),
-  "phone": zod.string().optional()
+  "phone": zod.string().nullish()
 })
 
 
@@ -675,7 +675,7 @@ export const GetFavoritesResponseItem = zod.object({
   "bufferMinutes": zod.number(),
   "price": zod.number(),
   "color": zod.string(),
-  "imageUrl": zod.string().optional(),
+  "imageUrl": zod.string().nullish(),
   "popular": zod.boolean(),
   "active": zod.boolean(),
   "staffIds": zod.array(zod.number())
@@ -772,20 +772,20 @@ export const GetDashboardResponse = zod.object({
   "amount": zod.number(),
   "currency": zod.string(),
   "provider": zod.string(),
-  "providerRef": zod.string().optional()
+  "providerRef": zod.string().nullish()
 })
 })),
   "recentCustomers": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string(),
   "email": zod.string(),
-  "phone": zod.string().optional(),
+  "phone": zod.string().nullish(),
   "initials": zod.string(),
   "color": zod.string(),
   "visits": zod.number(),
   "spending": zod.number(),
   "lastVisit": zod.string(),
-  "notes": zod.string().optional()
+  "notes": zod.string().nullish()
 })),
   "recentActivity": zod.array(zod.object({
   "id": zod.number(),

@@ -41,12 +41,18 @@ export interface Business {
   accent?: string;
   primaryColor: string;
   secondaryColor: string;
-  logoUrl?: string;
-  address?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  aboutTitle?: string;
-  aboutBody?: string;
+  /** @nullable */
+  logoUrl?: string | null;
+  /** @nullable */
+  address?: string | null;
+  /** @nullable */
+  contactEmail?: string | null;
+  /** @nullable */
+  contactPhone?: string | null;
+  /** @nullable */
+  aboutTitle?: string | null;
+  /** @nullable */
+  aboutBody?: string | null;
   bookingIntervalMinutes: number;
   cancellationPolicy: string;
 }
@@ -61,12 +67,18 @@ export interface BusinessInput {
   accent?: string;
   primaryColor?: string;
   secondaryColor?: string;
-  logoUrl?: string;
-  address?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  aboutTitle?: string;
-  aboutBody?: string;
+  /** @nullable */
+  logoUrl?: string | null;
+  /** @nullable */
+  address?: string | null;
+  /** @nullable */
+  contactEmail?: string | null;
+  /** @nullable */
+  contactPhone?: string | null;
+  /** @nullable */
+  aboutTitle?: string | null;
+  /** @nullable */
+  aboutBody?: string | null;
   bookingIntervalMinutes?: number;
   cancellationPolicy?: string;
 }
@@ -80,7 +92,8 @@ export interface Service {
   bufferMinutes: number;
   price: number;
   color: string;
-  imageUrl?: string;
+  /** @nullable */
+  imageUrl?: string | null;
   popular: boolean;
   active: boolean;
   staffIds: number[];
@@ -94,7 +107,8 @@ export interface ServiceInput {
   bufferMinutes?: number;
   price: number;
   color: string;
-  imageUrl?: string;
+  /** @nullable */
+  imageUrl?: string | null;
   popular?: boolean;
   active?: boolean;
   staffIds?: number[];
@@ -110,7 +124,8 @@ export interface VacationEntry {
   id: number;
   startDate: string;
   endDate: string;
-  reason?: string;
+  /** @nullable */
+  reason?: string | null;
 }
 
 export interface Staff {
@@ -119,7 +134,8 @@ export interface Staff {
   role: string;
   initials: string;
   color: string;
-  photoUrl?: string;
+  /** @nullable */
+  photoUrl?: string | null;
   active: boolean;
   utilization: number;
   bookings: number;
@@ -131,14 +147,16 @@ export interface Staff {
 export type StaffInputVacationsItem = {
   startDate: string;
   endDate: string;
-  reason?: string;
+  /** @nullable */
+  reason?: string | null;
 };
 
 export interface StaffInput {
   name: string;
   role: string;
   color?: string;
-  photoUrl?: string;
+  /** @nullable */
+  photoUrl?: string | null;
   active?: boolean;
   workingHours?: WorkingHoursEntry[];
   vacations?: StaffInputVacationsItem[];
@@ -155,7 +173,8 @@ export interface Payment {
   amount: number;
   currency: string;
   provider: string;
-  providerRef?: string;
+  /** @nullable */
+  providerRef?: string | null;
 }
 
 export interface Booking {
@@ -195,13 +214,15 @@ export interface Customer {
   id: number;
   name: string;
   email: string;
-  phone?: string;
+  /** @nullable */
+  phone?: string | null;
   initials: string;
   color: string;
   visits: number;
   spending: number;
   lastVisit: string;
-  notes?: string;
+  /** @nullable */
+  notes?: string | null;
 }
 
 export interface CustomerDetail {
@@ -210,20 +231,24 @@ export interface CustomerDetail {
 }
 
 export interface CustomerInput {
-  phone?: string;
-  notes?: string;
+  /** @nullable */
+  phone?: string | null;
+  /** @nullable */
+  notes?: string | null;
 }
 
 export interface Profile {
   id: number;
   name: string;
   email: string;
-  phone?: string;
+  /** @nullable */
+  phone?: string | null;
 }
 
 export interface ProfileInput {
   name?: string;
-  phone?: string;
+  /** @nullable */
+  phone?: string | null;
 }
 
 export interface Notification {

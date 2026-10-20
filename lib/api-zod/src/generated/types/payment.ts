@@ -11,5 +11,6 @@ export interface Payment {
   amount: number;
   currency: string;
   provider: string;
-  providerRef?: string;
+  /** @nullable */
+  providerRef?: string | null;
 }

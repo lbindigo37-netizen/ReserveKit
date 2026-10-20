@@ -14,7 +14,8 @@ export interface Staff {
   role: string;
   initials: string;
   color: string;
-  photoUrl?: string;
+  /** @nullable */
+  photoUrl?: string | null;
   active: boolean;
   utilization: number;
   bookings: number;
